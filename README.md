@@ -125,7 +125,158 @@ u := uint(f)
 const Pi = 3.14 // Constants cannot be declared using the := syntax.
 ```
 
-stopped here : https://tour.golang.org/basics/16
+```go
+// Create a huge number by shifting a 1 bit left 100 places.
+// In other words, the binary number that is 1 followed by 100 zeroes.
+Big = 1 << 100
+// Shift it right again 99 places, so we end up with 1<<1, or 2.
+Small = Big >> 99
+```
+
+## Statement
+
+### For
+
+```go
+for i := 0; i < 10; i++ {
+    /* CODE */
+}
+```
+
+The init statement will often be a short variable declaration, and the variables declared there are visible only in the scope of the `for` statement.
+
+Unlike other languages like C, Java, or JavaScript there are no parentheses surrounding the three components of the `for` statement and the braces `{ }` are always required.
+
+The init statement is optional:
+
+```go
+sum := 1
+for ; sum < 1000; {
+    sum += sum
+}
+```
+
+### For is Go's "while"
+
+```go
+sum := 1
+for sum < 1000 {
+    sum += sum
+}
+```
+
+The infinite loop:
+
+```go
+for {
+}
+```
+
+### If
+
+```go
+x := 5
+if x < 0 {
+    return sqrt(-x) + "i"
+}
+```
+
+If with a short statement
+
+```go
+if v := math.Pow(x, n); v < lim {
+    return v
+}
+```
+
+if - else
+
+```go
+if v := math.Pow(x, n); v < lim {
+    return v
+} else {
+    fmt.Printf("%g >= %g\n", v, lim)
+}
+
+if condition {
+    /* ... */
+} else if condition {
+    /* ... */
+} else {
+    /* ... */
+}
+```
+
+### Switch
+
+```go
+switch os := runtime.GOOS; os {
+    case "darwin":
+    fmt.Println("OS X.")
+    case "linux":
+    fmt.Println("Linux.")
+    default:
+    // freebsd, openbsd,
+    // plan9, windows...
+    fmt.Printf("%s.\n", os)
+}
+```
+
+Switch cases evaluate cases from top to bottom, stopping when a case succeeds.
+
+```go
+switch i {
+    case 0:
+    case f():
+}
+```
+
+does not call `f` if `i==0`.)
+
+The condition of a switch statement is optional.
+
+```go
+switch {
+    case t.Hour() < 12:
+    fmt.Println("Good morning!")
+    case t.Hour() < 17:
+    fmt.Println("Good afternoon.")
+    default:
+    fmt.Println("Good evening.")
+}
+```
+
+It can be a clean way to write long if-then-else chains.
+
+### Defer
+
+A `defer` statement defers the execution of a function until the surrounding function returns.
+
+```go
+func main() {
+	defer fmt.Println("world")
+	fmt.Println("hello")
+}
+
+/*
+OUTPUT:
+hello
+world
+*/
+```
+
+The deferred call's arguments are evaluated immediately, but the function call is not executed until the surrounding function returns.
+
+The defer calls are stored in a queue. The strategy of this queue is last-in-first-out.
+
+More info [here](https://go.dev/blog/defer-panic-and-recover)
+
+stopped [here](https://tour.golang.org/moretypes/1)
 
 
+## Methods and interfaces
+
+
+
+## Concurrency
 
