@@ -271,7 +271,99 @@ The defer calls are stored in a queue. The strategy of this queue is last-in-fir
 
 More info [here](https://go.dev/blog/defer-panic-and-recover)
 
-stopped [here](https://tour.golang.org/moretypes/1)
+## More types
+
+### Pointers
+
+The type `*T` is a pointer to a `T` value. Its zero value is `nil`.
+
+The `&` operator generates a pointer to its operand.
+
+The `*` operator denotes the pointer's underlying value.
+
+```go
+i, j := 42, 2701
+
+p := &i         // point to i
+fmt.Println(*p) // read i through the pointer
+*p = 21         // set i through the pointer
+fmt.Println(i)  // see the new value of i
+
+p = &j         // point to j
+*p = *p / 37   // divide j through the pointer
+fmt.Println(j) // see the new value of j
+```
+
+### Structs
+
+A struct is a collection of fields
+
+```go
+type Vertex struct {
+	X int
+	Y int
+	Z int
+}
+
+func main() {
+    v := Vertex{1, 3, 3}
+    fmt.Println(v) // {1, 3, 3}
+    v.X = 4
+	fmt.Println(v.X) // 4
+}
+```
+
+Struct fields can be accessed through a struct pointer.
+
+To access the field `X` of a struct when we have the struct pointer `p` we could write `(*p).X`. However, that notation is cumbersome, so the language permits us instead to write just `p.X`, without the explicit dereference.
+
+```go
+var (
+	v1 = Vertex{1, 2}  // has type Vertex
+	v2 = Vertex{X: 1}  // Y:0 is implicit
+	v3 = Vertex{}      // X:0 and Y:0
+	p  = &Vertex{1, 2} // has type *Vertex
+)
+```
+
+### Arrays
+
+The type `[n]T` is an array of `n` values of type `T`.
+
+```go
+var a [10]int
+```
+
+> An array's length is part of its type, so arrays cannot be resized.
+
+#### Slicing
+
+An array has a fixed size. A slice, on the other hand, is a dynamically-sized, flexible view into the elements of an array. In practice, slices are much more common than arrays.
+
+The type `[]T` is a slice with elements of type `T`.
+
+A slice is formed by specifying two indices, a low and high bound, separated by a colon:
+
+```go
+a[low : high]
+```
+
+This selects a half-open range which includes the first element, but excludes the last one.
+
+The following expression creates a slice which includes elements 1 through 3 of `a`:
+
+```go
+a[1:4]
+```
+
+```go
+primes := [6]int{2, 3, 5, 7, 11, 13}
+var s []int = primes[1:4]
+```
+
+
+
+stopped [here](https://tour.golang.org/moretypes/8)
 
 
 ## Methods and interfaces
