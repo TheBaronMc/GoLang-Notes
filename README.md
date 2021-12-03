@@ -172,6 +172,39 @@ for {
 }
 ```
 
+### Go's foreach
+
+The `range` form of the `for` loop iterates over a slice or map.
+
+When ranging over a slice, two values are returned for each iteration. The first is the index, and the second is a copy of the element at that index.
+
+```go
+var pow = []int{1, 2, 4, 8, 16, 32, 64, 128}
+
+func main() {
+	for i, v := range pow {
+		fmt.Printf("2**%d = %d\n", i, v)
+	}
+}
+```
+
+You can skip the index or value by assigning to `_`.
+
+```go
+for i, _ := range pow
+for _, value := range pow
+```
+
+If you only want the index, you can omit the second variable.
+
+```go
+for i := range pow
+```
+
+
+
+
+
 ### If
 
 ```go
@@ -336,9 +369,11 @@ var a [10]int
 
 > An array's length is part of its type, so arrays cannot be resized.
 
-#### Slicing
+#### Slices
 
-An array has a fixed size. A slice, on the other hand, is a dynamically-sized, flexible view into the elements of an array. In practice, slices are much more common than arrays.
+##### General
+
+An array has a fixed size. A slice, on the other hand, is a **dynamically-sized**, flexible view into the elements of an array. In practice, slices are much more common than arrays.
 
 The type `[]T` is a slice with elements of type `T`.
 
@@ -361,9 +396,97 @@ primes := [6]int{2, 3, 5, 7, 11, 13}
 var s []int = primes[1:4]
 ```
 
+The **length** of a slice is **the number of elements it contains**.
 
+The **capacity** of a slice is **the number of elements in the underlying array**, counting from the first element in the slice.
 
-stopped [here](https://tour.golang.org/moretypes/8)
+The length and capacity of a slice `s` can be obtained using the expressions `len(s)` and `cap(s)`.
+
+The zero value of a slice is `nil`.
+
+```go
+var s []int
+fmt.Println(s, len(s), cap(s))
+if s == nil {
+	fmt.Println("nil!")
+}
+```
+
+##### Creating a slice
+
+Slices can be created with the built-in `make` function; this is how you create dynamically-sized arrays.
+
+```go
+b := make([]int, 0, 5) // len(b)=0, cap(b)=5
+
+b = b[:cap(b)] // len(b)=5, cap(b)=5
+b = b[1:]      // len(b)=4, cap(b)=4
+```
+
+##### Append to a slice
+
+There is a built-in function for that
+
+```go
+func append(s []T, vs ...T) []T
+```
+
+Few example
+
+```go
+var s []int
+
+// append works on nil slices.
+s = append(s, 0)
+
+// The slice grows as needed.
+s = append(s, 1)
+
+// We can add more than one element at a time.
+s = append(s, 2, 3, 4)
+```
+
+To learn more about slices : https://go.dev/blog/slices-intro
+
+### Maps
+
+The zero value of a map is `nil`. A `nil` map has no keys, nor can keys be added.
+
+The `make` function returns a map of the given type, initialized and ready for use.
+
+```go
+type Vertex struct {
+	Lat, Long float64
+}
+```
+
+```go
+m = make(map[string]Vertex)
+m["Bell Labs"] = Vertex{
+    40.68433, -74.39967,
+}
+fmt.Println(m["Bell Labs"])
+```
+
+```go
+var m = map[string]Vertex{
+	"Bell Labs": Vertex{
+		40.68433, -74.39967,
+	},
+	"Google": Vertex{
+		37.42202, -122.08408,
+	},
+}
+```
+
+```go
+var m = map[string]Vertex{
+	"Bell Labs": {40.68433, -74.39967},
+	"Google":    {37.42202, -122.08408},
+}
+```
+
+stopped around [here](https://go.dev/tour/moretypes/21)
 
 
 ## Methods and interfaces
